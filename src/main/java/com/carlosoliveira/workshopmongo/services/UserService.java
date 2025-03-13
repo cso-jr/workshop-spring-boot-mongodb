@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import com.carlosoliveira.workshopmongo.domain.User;
 import com.carlosoliveira.workshopmongo.dto.UserDTO;
@@ -35,6 +36,19 @@ public class UserService {
 		repo.deleteById(id);
 	}
 	
+	// lógica da atualização: (1) recuperar o objeto que vai ser alterado; (2) atualizar pelos parâmetros do novo objeto
+	public User update(User obj) {
+		User newObj = findById(obj.getId()); //(1)
+		updateData(newObj, obj); //(2)
+		return repo.save(newObj);
+	}
+	
+	private void updateData(User newObj, User obj) {
+		newObj.setName(obj.getName());
+		newObj.setEmail(obj.getEmail());
+		
+	}
+
 	public User fromDTO(UserDTO objDTO) {
 		return new User(objDTO.getId(), objDTO.getName(), objDTO.getEmail());
 	}
